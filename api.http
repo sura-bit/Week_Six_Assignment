@@ -37,7 +37,7 @@ Content-Type: application/json
 
 { "name": "Ghost Room", "capacity": 5 }
 
-### 11. POST -> 201, id 4
+### 11. POST -> 201
 POST http://localhost:8080/api/rooms
 Content-Type: application/json
 
@@ -52,7 +52,7 @@ Content-Type: application/json
 ### 13. DELETE room without reservations -> 204
 DELETE http://localhost:8080/api/rooms/3
 
-### 14. count -> 200, body 3
+### 14. count -> 200
 GET http://localhost:8080/api/rooms/count
 
 ### 15. DELETE room with reservations -> 409
