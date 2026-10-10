@@ -1,0 +1,91 @@
+### GET all rooms - success
+GET http://localhost:8080/api/rooms
+
+###
+
+### GET rooms - minCapacity filter
+GET http://localhost:8080/api/rooms?minCapacity=6
+
+###
+
+### GET rooms - keyword filter
+GET http://localhost:8080/api/rooms?keyword=pod
+
+###
+
+### GET rooms - combined filters
+GET http://localhost:8080/api/rooms?minCapacity=6&keyword=roof
+
+###
+
+### GET rooms - sort by capacity
+GET http://localhost:8080/api/rooms?sort=capacity
+
+###
+
+### GET rooms - sort by name
+GET http://localhost:8080/api/rooms?sort=name
+
+###
+
+### GET room by ID - success
+GET http://localhost:8080/api/rooms/2
+
+###
+
+### GET room by ID - failure
+GET http://localhost:8080/api/rooms/99
+
+###
+
+### POST room - success
+POST http://localhost:8080/api/rooms
+Content-Type: application/json
+
+{
+  "name": "Meeting Room",
+  "capacity": 10
+}
+
+###
+
+### POST room - failure: capacity too high
+POST http://localhost:8080/api/rooms
+Content-Type: application/json
+
+{
+  "name": "Too Large Room",
+  "capacity": 25
+}
+
+###
+
+### PUT room - success
+PUT http://localhost:8080/api/rooms/1
+Content-Type: application/json
+
+{
+  "name": "Updated Seminar A",
+  "capacity": 15
+}
+
+###
+
+### PUT room - failure: capacity too low
+PUT http://localhost:8080/api/rooms/1
+Content-Type: application/json
+
+{
+  "name": "Invalid Room",
+  "capacity": 0
+}
+
+###
+
+### DELETE room - success
+DELETE http://localhost:8080/api/rooms/2
+
+###
+
+### DELETE room - failure
+DELETE http://localhost:8080/api/rooms/99
