@@ -2,7 +2,7 @@ package org.example.weeksixassignment;
 
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.data.domain.Sort;
 
 import java.util.Comparator;
 import java.util.List;
@@ -17,34 +17,31 @@ public class RoomService {
         this.roomRepository = roomRepository;
     }
 
-    public List<Room> search(
-            @RequestParam(required = false) Integer minCapacity,
-            @RequestParam(defaultValue = " ") String keyword,
-            @RequestParam(defaultValue = " ") String sort) {
+    public List<Room> search(Integer minCapacity, String keyword, String sort) {
+        Sort order = toSort(sort);
+        boolean hasKeyword = keyword != null && !keyword.isBlank();
 
-        List<Room> result = roomRepository.findAll().stream()
-                .filter(room ->
-                        minCapacity == null ||
-                                room.getCapacity() >= minCapacity)
-                .filter(room ->
-                        keyword == null ||
-                                room.getName().toLowerCase()
-                                        .contains(keyword.toLowerCase()))
-                .toList();
-
-        if ("capacity".equals(sort)) {
-            return result.stream()
-                    .sorted(Comparator.comparing(Room::getCapacity))
-                    .toList();
+        if (minCapacity != null && hasKeyword) {
+            return roomRepository
+                    .findByCapacityGreaterThanEqualAndNameContainingIgnoreCase(minCapacity, keyword, order);
         }
-
-        if ("name".equals(sort)) {
-            return result.stream()
-                    .sorted(Comparator.comparing(Room::getName))
-                    .toList();
+        if (minCapacity != null) {
+            return roomRepository.findByCapacityGreaterThanEqual(minCapacity, order);
         }
+        if (hasKeyword) {
+            return roomRepository.findByNameContainingIgnoreCase(keyword, order);
+        }
+        return roomRepository.findAll(order);
+    }
 
-        return result;
+    public long count() {
+        return roomRepository.count();
+    }
+
+    private Sort toSort(String sort) {
+        if ("capacity".equals(sort)) return Sort.by("capacity");
+        if ("name".equals(sort)) return Sort.by("name");
+        return Sort.by("id");
     }
 
     public Optional<Room> findById(Long id) {

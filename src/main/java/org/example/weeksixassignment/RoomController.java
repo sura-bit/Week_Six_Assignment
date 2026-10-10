@@ -21,10 +21,14 @@ public class RoomController {
     @GetMapping
     public List<Room> findAll(
             @RequestParam(required = false) Integer minCapacity,
-            @RequestParam(defaultValue = " ") String keyword,
-            @RequestParam(defaultValue = " ") String sort) {
-
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String sort) {
         return roomService.search(minCapacity, keyword, sort);
+    }
+
+    @GetMapping("/count")
+    public long count() {
+        return roomService.count();
     }
 
     // GET /api/rooms/{id}
