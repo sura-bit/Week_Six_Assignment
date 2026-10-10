@@ -1,5 +1,6 @@
 package org.example.weeksixassignment;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -24,22 +25,22 @@ public class RoomService {
         List<Room> result = roomRepository.findAll().stream()
                 .filter(room ->
                         minCapacity == null ||
-                                room.capacity() >= minCapacity)
+                                room.getCapacity() >= minCapacity)
                 .filter(room ->
                         keyword == null ||
-                                room.name().toLowerCase()
+                                room.getName().toLowerCase()
                                         .contains(keyword.toLowerCase()))
                 .toList();
 
         if ("capacity".equals(sort)) {
             return result.stream()
-                    .sorted(Comparator.comparing(Room::capacity))
+                    .sorted(Comparator.comparing(Room::getCapacity))
                     .toList();
         }
 
         if ("name".equals(sort)) {
             return result.stream()
-                    .sorted(Comparator.comparing(Room::name))
+                    .sorted(Comparator.comparing(Room::getName))
                     .toList();
         }
 
@@ -59,6 +60,7 @@ public class RoomService {
         );
     }
 
+    @Transactional
     public Optional<Room> update(
             Long id,
             String name,
@@ -73,7 +75,11 @@ public class RoomService {
     }
 
     public boolean delete(Long id) {
-        return roomRepository.deleteById(id);
+        if (!roomRepository.existsById(id)) {
+            return false;
+        }
+        roomRepository.deleteById(id);
+        return true;
     }
 
     public void checkCapacity(int capacity) {

@@ -44,12 +44,12 @@ public class RoomController {
 
         try {
             Room newRoom = roomService.create(
-                    room.name(),
-                    room.capacity()
+                    room.getName(),
+                    room.getCapacity()
             );
 
             return ResponseEntity
-                    .created(URI.create("/api/rooms/" + newRoom.id()))
+                    .created(URI.create("/api/rooms/" + newRoom.getId()))
                     .body(newRoom);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
@@ -65,8 +65,8 @@ public class RoomController {
         try {
             return roomService.update(
                             id,
-                            room.name(),
-                            room.capacity()
+                            room.getName(),
+                            room.getCapacity()
                     )
                     .map(ResponseEntity::ok)
                     .orElse(ResponseEntity.notFound().build());

@@ -1,11 +1,6 @@
 package org.example.weeksixassignment;
 
-import java.util.List;
-import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RoomRepository {
-    List<Room> findAll();
-    Optional<Room> findById(Long id);
-    Room save(Room room);
-    boolean deleteById(Long id);
+public interface RoomRepository extends JpaRepository<Room, Long> {
 }
