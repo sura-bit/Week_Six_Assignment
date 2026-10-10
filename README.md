@@ -1,3 +1,7 @@
+# Room API
+
+Spring Boot REST API for rooms, running on MySQL through Spring Data JPA.
+
 ## Database setup
 
 Run as root once (the root password is not stored in the project):
@@ -8,12 +12,18 @@ CREATE USER 'roomapp'@'localhost' IDENTIFIED BY 'roomapp1234';
 GRANT ALL PRIVILEGES ON roomdb.* TO 'roomapp'@'localhost';
 ```
 
-Before testing, reset the tables and sample data. Use either way:
+Before testing, reset the tables and sample data with `reset.sql`. Use either way:
 
 **Terminal** (from the project folder):
 
 ```bash
 mysql -u roomapp -p roomdb < reset.sql
+```
+
+On macOS, if you get `command not found: mysql`, use the full path:
+
+```bash
+/usr/local/mysql/bin/mysql -u roomapp -p roomdb < reset.sql
 ```
 
 Enter `roomapp1234` when asked for the password.
@@ -23,7 +33,14 @@ Enter `roomapp1234` when asked for the password.
 1. Open a connection as `roomapp` (password `roomapp1234`).
 2. Open `reset.sql` in any editor, copy everything, and paste it into a new SQL tab in Workbench.
 3. Click the lightning bolt ⚡ (Execute) to run the whole script.
-4. Check with `SELECT * FROM roomdb.room;`. It should show 3 rooms. -u roomapp -p roomdb < reset.sql
+4. Check with `SELECT * FROM roomdb.room;`. It should show 3 rooms.
+
+## How to run
+
+Run `reset.sql` first, then:
+
+```bash
+./gradlew bootRun
 ```
 
 ## API contract (run reset.sql first, then api.http in order)
@@ -79,9 +96,6 @@ Hibernate first SELECTs room 1 with `findById`, and because the service changes 
 inside a `@Transactional` method, dirty checking sends one UPDATE when the transaction commits,
 without calling `save`.
 
-Hibernate first SELECTs the room by id, and because the service changes that loaded entity inside
-a @Transactional method, dirty checking sends one UPDATE when the transaction commits.
-
 ## AI use
 
-Used Claude for README file writing.
+Used Claude to help me write this README.
